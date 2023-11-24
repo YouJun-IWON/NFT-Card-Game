@@ -36,7 +36,6 @@ const formSchema = z.object({
 });
 
 export const InitialModal = () => {
-
   const [isMounted, setIsMounted] = useState(false);
 
   const router = useRouter();
@@ -57,11 +56,11 @@ export const InitialModal = () => {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      await axios.post("/api/servers", values);
+      await axios.post('/api/servers', values);
       form.reset();
       router.refresh();
       window.location.reload();
-    } catch (error) { 
+    } catch (error) {
       console.log(error);
     }
   };
@@ -75,7 +74,7 @@ export const InitialModal = () => {
       <DialogContent className='bg-white text-black p-0 overflow-hidden'>
         <DialogHeader className='pt-8 px-6'>
           <DialogTitle className='text-2xl text-center font-bold'>
-            Customize your server(NFT 덱 선택 및 구성)
+            NFT 덱 선택 및 구성
           </DialogTitle>
           <DialogDescription className='text-center text-zinc-500'>
             Give your server a personality with a name and an image. You can
