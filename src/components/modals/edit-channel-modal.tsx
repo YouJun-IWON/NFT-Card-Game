@@ -24,7 +24,7 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { useParams, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { useModal } from '@/hooks/use-modal-store';
 import {
   Select,
@@ -47,41 +47,39 @@ const formSchema = z.object({
   type: z.nativeEnum(ChannelType),
 });
 
-export const CreateChannelModal = () => {
+export const EditChannelModal = () => {
   const { isOpen, onClose, type, data } = useModal();
   const router = useRouter();
-  const params = useParams();
 
-  const isModalOpen = isOpen && type === 'createChannel';
-  const { channelType } = data;
+  const isModalOpen = isOpen && type === 'editChannel';
+  const { channel, server } = data;
 
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: '',
-      type: channelType || ChannelType.TEXT,
+      type: channel?.type || ChannelType.TEXT,
     },
   });
 
   useEffect(() => {
-    if (channelType) {
-      form.setValue('type', channelType);
-    } else {
-      form.setValue('type', ChannelType.TEXT);
+    if (channel) {
+      form.setValue('name', channel.name);
+      form.setValue('type', channel.type);
     }
-  }, [channelType, form]);
+  }, [form, channel]);
 
   const isLoading = form.formState.isSubmitting;
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       const url = qs.stringifyUrl({
-        url: '/api/channels',
+        url: `/api/channels/${channel?.id}`,
         query: {
-          serverId: params?.serverId,
+          serverId: server?.id,
         },
       });
-      await axios.post(url, values);
+      await axios.patch(url, values);
 
       form.reset();
       router.refresh();
@@ -101,7 +99,7 @@ export const CreateChannelModal = () => {
       <DialogContent className='bg-white text-black p-0 overflow-hidden'>
         <DialogHeader className='pt-8 px-6'>
           <DialogTitle className='text-2xl text-center font-bold'>
-            Create Game Room
+            Edit Channel
           </DialogTitle>
         </DialogHeader>
         <Form {...form}>
@@ -113,13 +111,13 @@ export const CreateChannelModal = () => {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel className='uppercase text-xs font-bold text-zinc-500 dark:text-secondary/70'>
-                      Room name
+                      Channel name
                     </FormLabel>
                     <FormControl>
                       <Input
                         disabled={isLoading}
                         className='bg-zinc-300/50 border-0 focus-visible:ring-0 text-black focus-visible:ring-offset-0'
-                        placeholder='Enter room name'
+                        placeholder='Enter channel name'
                         {...field}
                       />
                     </FormControl>
@@ -127,13 +125,12 @@ export const CreateChannelModal = () => {
                   </FormItem>
                 )}
               />
-              {/* TODO: check */}
               <FormField
                 control={form.control}
                 name='type'
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Game Type</FormLabel>
+                    <FormLabel>Channel Type</FormLabel>
                     <Select
                       disabled={isLoading}
                       onValueChange={field.onChange}
@@ -154,10 +151,6 @@ export const CreateChannelModal = () => {
                             {type.toLowerCase()}
                           </SelectItem>
                         ))}
-
-                        {/* <SelectItem value='One Card' className='capitalize'>
-                          One Card
-                        </SelectItem> */}
                       </SelectContent>
                     </Select>
                     <FormMessage />
@@ -167,7 +160,7 @@ export const CreateChannelModal = () => {
             </div>
             <DialogFooter className='bg-gray-100 px-6 py-4'>
               <Button variant='primary' disabled={isLoading}>
-                Create
+                Save
               </Button>
             </DialogFooter>
           </form>

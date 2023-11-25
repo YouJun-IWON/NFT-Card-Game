@@ -11,6 +11,10 @@ import {
   ShieldAlert,
   ShieldCheck,
   ShieldQuestion,
+  Heart,
+  Spade,
+  Diamond,
+  Club,
 } from 'lucide-react';
 import { useState } from 'react';
 import { MemberRole } from '@prisma/client';
@@ -100,12 +104,15 @@ export const MembersModal = () => {
       <DialogContent className='bg-white text-black overflow-hidden'>
         <DialogHeader className='pt-8 px-6'>
           <DialogTitle className='text-2xl text-center font-bold'>
-            Manage Members
+            Manage NFT Poker Card
           </DialogTitle>
           <DialogDescription className='text-center text-zinc-500'>
-            {server?.members?.length} Members
+            {/* {server?.members?.length} Cards */}
+            Your {server?.collection} Collection includes 69 NFTs
           </DialogDescription>
         </DialogHeader>
+
+        {/* TODO: check */}
         <ScrollArea className='mt-8 max-h-[420px] pr-6'>
           {server?.members?.map((member) => (
             <div key={member.id} className='flex items-center gap-x-2 mb-6'>
@@ -115,9 +122,7 @@ export const MembersModal = () => {
                   {member.profile.name}
                   {roleIconMap[member.role]}
                 </div>
-                <p className='text-xs text-zinc-500'>
-                  {member.profile.address}
-                </p>
+                <p className='text-xs text-zinc-500'>{member.profile.email}</p>
               </div>
               {server.profileId !== member.profileId &&
                 loadingId !== member.id && (
@@ -176,3 +181,170 @@ export const MembersModal = () => {
     </Dialog>
   );
 };
+
+//  {/* TODO: check */}
+//  <ScrollArea className='mt-8 max-h-[420px] pr-6'>
+//  {server?.members?.map((member) => (
+//    <div key={member.id} className='flex items-center gap-x-2 mb-6'>
+//      <UserAvatar src={member.profile.imageUrl} />
+//      <div className='flex flex-col gap-y-1'>
+//        <div className='text-xs font-semibold flex items-center gap-x-1'>
+//          {/* {member.profile.name} */}
+//          NFT name
+//          {/* {roleIconMap[member.role]} */}
+//        <Heart fill="red" className='w-4 h-4 text-red-500'/>
+//        <p className='text-red-500 text-[15px]'>4</p>
+//        </div>
+//        <p className='text-xs text-zinc-500'>
+//          {/* {member.profile.address} */}
+//          추가적인 정보
+//        </p>
+//      </div>
+//      {/* {server.profileId !== member.profileId &&
+//        loadingId !== member.id && ( */}
+//          <div className='ml-auto'>
+//            <DropdownMenu>
+//              <DropdownMenuTrigger>
+//                <MoreVertical className='h-4 w-4 text-zinc-500' />
+//              </DropdownMenuTrigger>
+//              <DropdownMenuContent side='left'>
+//                <DropdownMenuSub>
+//                  <DropdownMenuSubTrigger className='flex items-center'>
+//                    <Spade className='w-4 h-4 mr-2' />
+//                    <span>Spade</span>
+//                  </DropdownMenuSubTrigger>
+//                  <DropdownMenuPortal>
+//                    <DropdownMenuSubContent>
+//                      <DropdownMenuItem
+//                        onClick={() => onRoleChange(member.id, 'GUEST')}
+//                      >
+//                        <Spade className='h-4 w-4 mr-2' />
+//                        A
+//                        {member.role === 'GUEST' && (
+//                          <Check className='h-4 w-4 ml-auto' />
+//                        )}
+//                      </DropdownMenuItem>
+//                      <DropdownMenuItem
+//                        onClick={() =>
+//                          onRoleChange(member.id, 'MODERATOR')
+//                        }
+//                      >
+//                        <Spade className='h-4 w-4 mr-2' />
+//                        2
+//                        {member.role === 'MODERATOR' && (
+//                          <Check className='h-4 w-4 ml-auto' />
+//                        )}
+//                      </DropdownMenuItem>
+//                    </DropdownMenuSubContent>
+//                  </DropdownMenuPortal>
+//                </DropdownMenuSub>
+//                <DropdownMenuSeparator />
+//                <DropdownMenuSub>
+//                  <DropdownMenuSubTrigger className='flex items-center'>
+//                    <Diamond fill='red' className='w-4 h-4 mr-2' />
+//                    <span>Diamond</span>
+//                  </DropdownMenuSubTrigger>
+//                  <DropdownMenuPortal>
+//                  <DropdownMenuSubContent>
+//                      <DropdownMenuItem
+//                        onClick={() => onRoleChange(member.id, 'GUEST')}
+//                      >
+//                        <Diamond fill='red' className='h-4 w-4 mr-2' />
+//                        A
+//                        {member.role === 'GUEST' && (
+//                          <Check className='h-4 w-4 ml-auto' />
+//                        )}
+//                      </DropdownMenuItem>
+//                      <DropdownMenuItem
+//                        onClick={() =>
+//                          onRoleChange(member.id, 'MODERATOR')
+//                        }
+//                      >
+//                        <Diamond fill='red' className='h-4 w-4 mr-2' />
+//                        2
+//                        {member.role === 'MODERATOR' && (
+//                          <Check className='h-4 w-4 ml-auto' />
+//                        )}
+//                      </DropdownMenuItem>
+//                    </DropdownMenuSubContent>
+//                  </DropdownMenuPortal>
+//                </DropdownMenuSub>
+
+//                <DropdownMenuSeparator />
+//                <DropdownMenuSub>
+//                  <DropdownMenuSubTrigger className='flex items-center'>
+//                    <Club className='w-4 h-4 mr-2' />
+//                    <span>Club</span>
+//                  </DropdownMenuSubTrigger>
+//                  <DropdownMenuPortal>
+//                  <DropdownMenuSubContent>
+//                      <DropdownMenuItem
+//                        onClick={() => onRoleChange(member.id, 'GUEST')}
+//                      >
+//                        <Club className='h-4 w-4 mr-2' />
+//                        A
+//                        {member.role === 'GUEST' && (
+//                          <Check className='h-4 w-4 ml-auto' />
+//                        )}
+//                      </DropdownMenuItem>
+//                      <DropdownMenuItem
+//                        onClick={() =>
+//                          onRoleChange(member.id, 'MODERATOR')
+//                        }
+//                      >
+//                        <Club className='h-4 w-4 mr-2' />
+//                        2
+//                        {member.role === 'MODERATOR' && (
+//                          <Check className='h-4 w-4 ml-auto' />
+//                        )}
+//                      </DropdownMenuItem>
+//                    </DropdownMenuSubContent>
+//                  </DropdownMenuPortal>
+//                </DropdownMenuSub>
+
+//                <DropdownMenuSeparator />
+//                <DropdownMenuSub>
+//                  <DropdownMenuSubTrigger className='flex items-center'>
+//                    <Heart fill='red' className='w-4 h-4 mr-2' />
+//                    <span>Heart</span>
+//                  </DropdownMenuSubTrigger>
+//                  <DropdownMenuPortal>
+//                  <DropdownMenuSubContent>
+//                      <DropdownMenuItem
+//                        onClick={() => onRoleChange(member.id, 'GUEST')}
+//                      >
+//                        <Heart fill='red' className='h-4 w-4 mr-2' />
+//                        A
+//                        {member.role === 'GUEST' && (
+//                          <Check className='h-4 w-4 ml-auto' />
+//                        )}
+//                      </DropdownMenuItem>
+//                      <DropdownMenuItem
+//                        onClick={() =>
+//                          onRoleChange(member.id, 'MODERATOR')
+//                        }
+//                      >
+//                        <Heart fill='red' className='h-4 w-4 mr-2' />
+//                        2
+//                        {member.role === 'MODERATOR' && (
+//                          <Check className='h-4 w-4 ml-auto' />
+//                        )}
+//                      </DropdownMenuItem>
+//                    </DropdownMenuSubContent>
+//                  </DropdownMenuPortal>
+//                </DropdownMenuSub>
+
+//                {/* <DropdownMenuItem onClick={() => onKick(member.id)}>
+//                  <Gavel className='h-4 w-4 mr-2' />
+//                  Kick
+//                </DropdownMenuItem> */}
+//              </DropdownMenuContent>
+//            </DropdownMenu>
+//          </div>
+//        {/* )} */}
+//      {loadingId === member.id && (
+//        <Loader2 className='animate-spin text-zinc-500 ml-auto w-4 h-4' />
+//      )}
+//    </div>
+//  ))}
+// </ScrollArea>

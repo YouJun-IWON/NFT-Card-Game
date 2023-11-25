@@ -7,7 +7,7 @@ import { db } from '@/lib/db';
 
 export async function POST(req: Request) {
   try {
-    const { name, imageUrl } = await req.json();
+    const { name, imageUrl, collection } = await req.json();
 
     const profile = await currentProfile();
 
@@ -20,6 +20,7 @@ export async function POST(req: Request) {
         profileId: profile.id,
         name,
         imageUrl,
+        collection,
         inviteCode: uuidv4(),
         channels: {
           create: [{ name: 'general', profileId: profile.id }],

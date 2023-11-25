@@ -9,7 +9,12 @@ import {
   Settings,
   Trash,
   UserPlus,
+  Spade,
+  Heart,
   Users,
+  Diamond,
+  Club,
+  SquareAsterisk
 } from 'lucide-react';
 
 import {
@@ -47,7 +52,7 @@ export const ServerHeader = ({ server, role }: ServerHeaderProps) => {
             className='text-indigo-600 dark:text-indigo-400 px-3 py-2 text-sm cursor-pointer'
           >
             Invite People
-            <UserPlus className='h-4 w-4 ml-auto' />
+            <Heart className='h-4 w-4 ml-auto' />
           </DropdownMenuItem>
         )}
         {isAdmin && (
@@ -55,8 +60,8 @@ export const ServerHeader = ({ server, role }: ServerHeaderProps) => {
             onClick={() => onOpen('editServer', { server })}
             className='px-3 py-2 text-sm cursor-pointer'
           >
-            Server Settings
-            <Settings className='h-4 w-4 ml-auto' />
+            Deck Cover Settings
+            <Spade className='h-4 w-4 ml-auto' />
           </DropdownMenuItem>
         )}
         {isAdmin && (
@@ -64,8 +69,8 @@ export const ServerHeader = ({ server, role }: ServerHeaderProps) => {
             onClick={() => onOpen('members', { server })}
             className='px-3 py-2 text-sm cursor-pointer'
           >
-            Edit My Deck
-            <Users className='h-4 w-4 ml-auto' />
+            Edit NFT Card
+            <Diamond className='h-4 w-4 ml-auto' />
           </DropdownMenuItem>
         )}
         {isModerator && (
@@ -73,8 +78,8 @@ export const ServerHeader = ({ server, role }: ServerHeaderProps) => {
             onClick={() => onOpen('createChannel')}
             className='px-3 py-2 text-sm cursor-pointer'
           >
-            Create NFT Deck
-            <PlusCircle className='h-4 w-4 ml-auto' />
+            Create One Card Game
+            <Club className='h-4 w-4 ml-auto' />
           </DropdownMenuItem>
         )}
         {isModerator && <DropdownMenuSeparator />}
@@ -83,7 +88,7 @@ export const ServerHeader = ({ server, role }: ServerHeaderProps) => {
             onClick={() => onOpen('deleteServer', { server })}
             className='text-rose-500 px-3 py-2 text-sm cursor-pointer'
           >
-            Delete Server
+            Delete Deck
             <Trash className='h-4 w-4 ml-auto' />
           </DropdownMenuItem>
         )}
@@ -92,7 +97,7 @@ export const ServerHeader = ({ server, role }: ServerHeaderProps) => {
             onClick={() => onOpen('leaveServer', { server })}
             className='text-rose-500 px-3 py-2 text-sm cursor-pointer'
           >
-            Leave Server
+            Leave Game
             <LogOut className='h-4 w-4 ml-auto' />
           </DropdownMenuItem>
         )}

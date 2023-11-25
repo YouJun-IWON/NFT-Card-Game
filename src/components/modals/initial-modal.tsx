@@ -23,6 +23,13 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { FileUpload } from '@/components/file-upload';
@@ -33,6 +40,7 @@ const formSchema = z.object({
     message: 'Server name is required.',
   }),
   imageUrl: z.string().min(1, { message: 'Server image is required.' }),
+  collection: z.string().min(1, { message: 'Collection is required.' }),
 });
 
 export const InitialModal = () => {
@@ -49,6 +57,7 @@ export const InitialModal = () => {
     defaultValues: {
       name: '',
       imageUrl: '',
+      collection: '',
     },
   });
 
@@ -74,11 +83,11 @@ export const InitialModal = () => {
       <DialogContent className='bg-white text-black p-0 overflow-hidden'>
         <DialogHeader className='pt-8 px-6'>
           <DialogTitle className='text-2xl text-center font-bold'>
-            NFT 덱 선택 및 구성
+            Create First NFT Poker Deck
           </DialogTitle>
           <DialogDescription className='text-center text-zinc-500'>
-            Give your server a personality with a name and an image. You can
-            always change it later.
+            Choose a cover photo for your deck. Then select the NFTs that will
+            make up your deck.
           </DialogDescription>
         </DialogHeader>
 
@@ -109,16 +118,58 @@ export const InitialModal = () => {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel className='uppercase text-xs font-bold text-zinc-500 dark:text-secondary/70'>
-                      Server name
+                      NFT Poker Deck name
                     </FormLabel>
                     <FormControl>
                       <Input
                         disabled={isLoading}
                         className='bg-zinc-300/50 border-0 focus-visible:ring-0 text-black focus-visible:ring-offset-0'
-                        placeholder='Enter server name'
+                        placeholder='Enter Deck name'
                         {...field}
                       />
                     </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              {/* TODO: check */}
+              <FormField
+                control={form.control}
+                name='collection'
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className='uppercase text-xs font-bold text-zinc-500 dark:text-secondary/70'>
+                      Collection containing more than 54 NFTs
+                    </FormLabel>
+                    <Select
+                      disabled={isLoading}
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <FormControl>
+                        <SelectTrigger className='bg-zinc-300/50 border-0 focus:ring-0 text-black ring-offset-0 focus:ring-offset-0 capitalize outline-none'>
+                          <SelectValue placeholder='Select Your NFT Collection' />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {/* {Object.values(Collections).map((collection) => (
+                          <SelectItem
+                            key={collection}
+                            value={collection}
+                            className='capitalize'
+                          >
+                            {collection.toLowerCase()}
+                          </SelectItem>
+                        ))} */}
+                        {/* <SelectItem value='버마' className='capitalize'>
+                          버마
+                        </SelectItem>
+                        <SelectItem value='수리' className='capitalize'>
+                          수리
+                        </SelectItem> */}
+                      </SelectContent>
+                    </Select>
                     <FormMessage />
                   </FormItem>
                 )}
