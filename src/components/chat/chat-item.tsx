@@ -110,6 +110,7 @@ export const ChatItem = ({
     form.reset({
       content: content,
     });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [content]);
 
   const fileType = fileUrl?.split('.').pop();
