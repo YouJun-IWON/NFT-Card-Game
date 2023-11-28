@@ -14,7 +14,7 @@ import {
   Users,
   Diamond,
   Club,
-  SquareAsterisk
+  SquareAsterisk,
 } from 'lucide-react';
 
 import {
@@ -29,9 +29,14 @@ import { useModal } from '@/hooks/use-modal-store';
 interface ServerHeaderProps {
   server: ServerWithMembersWithProfiles;
   role?: MemberRole;
+  roomStatus?: any;
 }
 
-export const ServerHeader = ({ server, role }: ServerHeaderProps) => {
+export const ServerHeader = ({
+  server,
+  role,
+  roomStatus,
+}: ServerHeaderProps) => {
   const { onOpen } = useModal();
 
   const isAdmin = role === MemberRole.ADMIN;
@@ -75,10 +80,11 @@ export const ServerHeader = ({ server, role }: ServerHeaderProps) => {
         )}
         {isModerator && (
           <DropdownMenuItem
-            onClick={() => onOpen('createChannel')}
+            disabled={roomStatus.length > 0}
+            onClick={() => onOpen('createChannel', { server })}
             className='px-3 py-2 text-sm cursor-pointer'
           >
-            Create One Card Game
+            Create Card Game
             <Club className='h-4 w-4 ml-auto' />
           </DropdownMenuItem>
         )}

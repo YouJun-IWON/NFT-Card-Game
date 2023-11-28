@@ -1,16 +1,30 @@
-import { Server as NetServer, Socket } from "net";
+import { Server as NetServer, Socket } from 'net';
 import { NextApiResponse } from 'next';
-import { Server as SocketIOServer } from "socket.io";
-import { Server, Member, Profile } from '@prisma/client';
+import { Server as SocketIOServer } from 'socket.io';
+import { Server, Member, Profile, OneCardRoom } from '@prisma/client';
 
 export type ServerWithMembersWithProfiles = Server & {
-  members: (Member & { profile: Profile})[];
-}
+  members: (Member & { profile: Profile })[];
+};
+
+export type SetOneCardRoom = {
+  room: OneCardRoom;
+};
+
+export type SetServer = {
+  server: Server;
+};
 
 export type NextApiResponseServerIo = NextApiResponse & {
   socket: Socket & {
     server: NetServer & {
-      io: SocketIOServer
-    }
-  }
-}
+      io: SocketIOServer;
+    };
+  };
+};
+
+export type GameType = {
+  ONE: 'ONE';
+  SEVEN: 'AUDIO';
+  VIDEO: 'VIDEO';
+};

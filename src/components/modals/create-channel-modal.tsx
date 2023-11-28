@@ -5,7 +5,7 @@ import axios from 'axios';
 import * as z from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
-import { ChannelType } from '@prisma/client';
+import { GameType } from '@prisma/client';
 
 import {
   Dialog,
@@ -34,6 +34,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { useEffect } from 'react';
+import { useOrigin } from '@/hooks/use-origin';
 
 const formSchema = z.object({
   name: z
@@ -44,44 +45,59 @@ const formSchema = z.object({
     .refine((name) => name !== 'general', {
       message: "Channel name cannot be 'general'",
     }),
-  type: z.nativeEnum(ChannelType),
+  type: z.nativeEnum(GameType),
 });
 
+// TODO: 하나만 생성할 수 있게 해야한다. 내 ID가 있는 room의 status가 READY 나 RUN이면 만들지 못하게 한다. 
 export const CreateChannelModal = () => {
   const { isOpen, onClose, type, data } = useModal();
   const router = useRouter();
   const params = useParams();
 
+  const origin = useOrigin();
+
+  const { server } = data;
+
+  const inviteUrl = `${origin}/invite/${server?.inviteCode}`;
+
   const isModalOpen = isOpen && type === 'createChannel';
-  const { channelType } = data;
 
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: '',
-      type: channelType || ChannelType.TEXT,
+      type: GameType.ONE,
     },
   });
 
-  useEffect(() => {
-    if (channelType) {
-      form.setValue('type', channelType);
-    } else {
-      form.setValue('type', ChannelType.TEXT);
-    }
-  }, [channelType, form]);
+  // useEffect(() => {
+  //   if (channelType) {
+  //     form.setValue('type', channelType);
+  //   } else {
+  //     form.setValue('type', ChannelType.TEXT);
+  //   }
+  // }, [channelType, form]);
 
   const isLoading = form.formState.isSubmitting;
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
+
+
+    const newValues = {
+      ...values,
+      url: `${origin}/invite/${server?.inviteCode}`,
+      deck1: server?.id,
+      deck1Name: server?.name,
+      deck1Image: server?.imageUrl,
+    };
     try {
       const url = qs.stringifyUrl({
-        url: '/api/channels',
+        url: '/api/game',
         query: {
           serverId: params?.serverId,
         },
       });
-      await axios.post(url, values);
+      await axios.post(url, newValues);
 
       form.reset();
       router.refresh();
@@ -123,11 +139,12 @@ export const CreateChannelModal = () => {
                         {...field}
                       />
                     </FormControl>
+
                     <FormMessage />
                   </FormItem>
                 )}
               />
-              {/* TODO: check */}
+
               <FormField
                 control={form.control}
                 name='type'
@@ -141,11 +158,11 @@ export const CreateChannelModal = () => {
                     >
                       <FormControl>
                         <SelectTrigger className='bg-zinc-300/50 border-0 focus:ring-0 text-black ring-offset-0 focus:ring-offset-0 capitalize outline-none'>
-                          <SelectValue placeholder='Select a channel type' />
+                          <SelectValue placeholder='Select a game type' />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        {Object.values(ChannelType).map((type) => (
+                        {/* {Object.values(ChannelType).map((type) => (
                           <SelectItem
                             key={type}
                             value={type}
@@ -153,11 +170,11 @@ export const CreateChannelModal = () => {
                           >
                             {type.toLowerCase()}
                           </SelectItem>
-                        ))}
+                        ))} */}
 
-                        {/* <SelectItem value='One Card' className='capitalize'>
+                        <SelectItem value='ONE' className='capitalize'>
                           One Card
-                        </SelectItem> */}
+                        </SelectItem>
                       </SelectContent>
                     </Select>
                     <FormMessage />

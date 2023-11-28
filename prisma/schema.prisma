@@ -1,11 +1,11 @@
-generator client {
-  provider = "prisma-client-js"
-}
-
 datasource db {
   provider     = "mysql"
   url          = env("DATABASE_URL")
   relationMode = "prisma"
+}
+
+generator client {
+  provider = "prisma-client-js"
 }
 
 model Profile {
@@ -19,6 +19,7 @@ model Profile {
   servers  Server[]
   members  Member[]
   channels Channel[]
+  
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -30,6 +31,8 @@ model Server {
   imageUrl   String @db.Text
   inviteCode String @unique
   collection String @db.Text
+  cards      String @db.LongText
+  owner      String @db.Text
 
   profileId String
   profile   Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
@@ -78,6 +81,18 @@ enum ChannelType {
   VIDEO
 }
 
+enum GameType {
+  ONE
+  SEVEN
+  BLACK
+}
+
+enum GameStatus {
+  READY
+  RUN
+  END
+}
+
 model Channel {
   id   String      @id @default(uuid())
   name String
@@ -96,6 +111,52 @@ model Channel {
 
   @@index([profileId])
   @@index([serverId])
+}
+
+model OneCardRoom {
+  id      String @id @default(uuid())
+  name    String
+
+  player1 String 
+  player1Address String @db.Text
+  player1Image String @db.Text
+
+  deck1 String
+  deck1Name String
+  deck1Image String @db.Text
+
+  player2 String @db.Text
+  player2Address String @db.Text
+  player2Image String @db.Text
+
+  deck2 String
+  deck2Name String
+  deck2Image String @db.Text
+  
+
+  url String @db.Text
+
+  type GameType @default(ONE)
+
+  check1 Boolean
+  check2 Boolean
+
+  status GameStatus @default(READY)
+
+  createdAt DateTime @default(now())
+
+  @@index([player1])
+  @@index([deck1])
+}
+
+model Announcement {
+  id          String @id @default(uuid())
+  title       String
+  description String
+  writer      String @db.LongText
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Message {

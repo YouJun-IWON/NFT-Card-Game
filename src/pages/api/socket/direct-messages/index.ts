@@ -4,6 +4,7 @@ import { NextApiResponseServerIo } from '@/types';
 import { currentProfilePages } from '@/lib/current-profile-pages';
 import { db } from '@/lib/db';
 
+// TODODO: 여기서 처음 생성될 때 카드의 분배가 각각의 카드가 어떤 것인지 결정된다.
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponseServerIo

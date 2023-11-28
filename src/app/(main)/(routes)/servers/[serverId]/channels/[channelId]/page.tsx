@@ -5,8 +5,8 @@ import { ChannelType } from '@prisma/client';
 import { currentProfile } from '@/lib/current-profile';
 import { ChatHeader } from '@/components/chat/chat-header';
 import { ChatInput } from '@/components/chat/chat-input';
-import { ChatMessages } from '@/components/chat/chat-messages';
-// import { MediaRoom } from '@/components/media-room';
+import { RoomList } from '@/components/chat/room-list';
+
 import { db } from '@/lib/db';
 
 interface ChannelIdPageProps {
@@ -40,6 +40,8 @@ const ChannelIdPage = async ({ params }: ChannelIdPageProps) => {
     redirect('/');
   }
 
+  
+
   return (
     <div className='bg-white dark:bg-[#313338] flex flex-col h-full'>
       <ChatHeader
@@ -47,33 +49,11 @@ const ChannelIdPage = async ({ params }: ChannelIdPageProps) => {
         serverId={channel.serverId}
         type='channel'
       />
-      {channel.type === ChannelType.TEXT && (
-        <>
-          <ChatMessages
-            member={member}
-            name={channel.name}
-            chatId={channel.id}
-            type='channel'
-            apiUrl='/api/messages'
-            socketUrl='/api/socket/messages'
-            socketQuery={{
-              channelId: channel.id,
-              serverId: channel.serverId,
-            }}
-            paramKey='channelId'
-            paramValue={channel.id}
-          />
-          <ChatInput
-            name={channel.name}
-            type='channel'
-            apiUrl='/api/socket/messages'
-            query={{
-              channelId: channel.id,
-              serverId: channel.serverId,
-            }}
-          />
-        </>
-      )}
+
+      <RoomList name={channel.name} serverId={params.serverId} />
+
+      
+
       {/* {channel.type === ChannelType.AUDIO && (
         <MediaRoom chatId={channel.id} video={false} audio={true} />
       )}
@@ -85,3 +65,13 @@ const ChannelIdPage = async ({ params }: ChannelIdPageProps) => {
 };
 
 export default ChannelIdPage;
+
+//           <ChatInput
+//             name={channel.name}
+//             type='channel'
+//             apiUrl='/api/socket/messages'
+//             query={{
+//               channelId: channel.id,
+//               serverId: channel.serverId,
+//             }}
+//           />

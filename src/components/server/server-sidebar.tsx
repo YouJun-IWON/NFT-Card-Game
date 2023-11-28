@@ -17,12 +17,6 @@ interface ServerSidebarProps {
   serverId: string;
 }
 
-const iconMap = {
-  [ChannelType.TEXT]: <Hash className='mr-2 h-4 w-4' />,
-  [ChannelType.AUDIO]: <Mic className='mr-2 h-4 w-4' />,
-  [ChannelType.VIDEO]: <Video className='mr-2 h-4 w-4' />,
-};
-
 const roleIconMap = {
   [MemberRole.GUEST]: null,
   [MemberRole.MODERATOR]: (
@@ -37,6 +31,18 @@ export const ServerSidebar = async ({ serverId }: ServerSidebarProps) => {
   if (!profile) {
     return redirect('/');
   }
+
+  const guest = await db.member.findMany({
+    where: {
+      serverId: serverId,
+      profileId: profile.id,
+    },
+    select: {
+      role: true,
+    },
+  });
+
+  console.log('Guest', guest);
 
   const server = await db.server.findUnique({
     where: {
@@ -58,6 +64,20 @@ export const ServerSidebar = async ({ serverId }: ServerSidebarProps) => {
       },
     },
   });
+
+  const roomStatus = await db.oneCardRoom.findMany({
+    where: {
+      deck1: server!.id,
+      status: {
+        in: ['READY', 'RUN'],
+      },
+    },
+    select: {
+      status: true,
+    },
+  });
+
+  console.log('roomStatus', roomStatus);
 
   const textChannels = server?.channels.filter(
     (channel) => channel.type === ChannelType.TEXT
@@ -82,10 +102,13 @@ export const ServerSidebar = async ({ serverId }: ServerSidebarProps) => {
 
   return (
     <div className='flex flex-col h-full text-primary w-full dark:bg-[#2B2D31] bg-[#F2F3F5]'>
-      <ServerHeader server={server} role={role} />
+      <ServerHeader server={server} role={role} roomStatus={roomStatus} />
       <ScrollArea className='flex-1 px-3'>
         <div className='mt-2'>
-          <ServerSearch
+          <span>{server.collection} Collection</span>
+          <Separator className='bg-zinc-200 dark:bg-zinc-700 rounded-md my-2' />
+
+          {/* <ServerSearch
             data={[
               {
                 label: 'Text Channels',
@@ -124,16 +147,16 @@ export const ServerSidebar = async ({ serverId }: ServerSidebarProps) => {
                 })),
               },
             ]}
-          />
+          /> */}
         </div>
-        <Separator className='bg-zinc-200 dark:bg-zinc-700 rounded-md my-2' />
-        {!!textChannels?.length && (
+        {/* <Separator className='bg-zinc-200 dark:bg-zinc-700 rounded-md my-2' /> */}
+        {!!textChannels?.length && guest[0].role === 'ADMIN' && (
           <div className='mb-2'>
             <ServerSection
               sectionType='channels'
               channelType={ChannelType.TEXT}
               role={role}
-              label='Text Channels'
+              label='Channels'
             />
             <div className='space-y-[2px]'>
               {textChannels.map((channel) => (
@@ -147,7 +170,7 @@ export const ServerSidebar = async ({ serverId }: ServerSidebarProps) => {
             </div>
           </div>
         )}
-        {!!audioChannels?.length && (
+        {/* {!!audioChannels?.length && (
           <div className='mb-2'>
             <ServerSection
               sectionType='channels'
@@ -186,7 +209,7 @@ export const ServerSidebar = async ({ serverId }: ServerSidebarProps) => {
               ))}
             </div>
           </div>
-        )}
+        )} */}
         {!!members?.length && (
           <div className='mb-2'>
             <ServerSection

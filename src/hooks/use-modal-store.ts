@@ -1,4 +1,4 @@
-import { Channel, ChannelType, Server } from '@prisma/client';
+import { Channel, ChannelType, OneCardRoom, Profile, Server } from '@prisma/client';
 import { create } from 'zustand';
 
 export type ModalType =
@@ -12,9 +12,15 @@ export type ModalType =
   | 'deleteChannel'
   | 'editChannel'
   | 'messageFile'
-  | 'deleteMessage';
+  | 'deleteMessage'
+  | 'joinGame'
+  | 'endgame';
 
 interface ModalData {
+  profile?: Profile;
+  myDecks?: any;
+  collection?: string;
+  room?: OneCardRoom;
   server?: Server;
   channel?: Channel;
   channelType?: ChannelType;

@@ -34,6 +34,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { FileUpload } from '@/components/file-upload';
 import { useRouter } from 'next/navigation';
+import { dummyCards } from '@/constants/dummyData';
 
 const formSchema = z.object({
   name: z.string().min(1, {
@@ -43,8 +44,10 @@ const formSchema = z.object({
   collection: z.string().min(1, { message: 'Collection is required.' }),
 });
 
-export const InitialModal = () => {
+export const InitialModal = ({ deckExisting }: any) => {
   const [isMounted, setIsMounted] = useState(false);
+
+  const [cards, setCards] = useState('');
 
   const router = useRouter();
 
@@ -65,7 +68,20 @@ export const InitialModal = () => {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      await axios.post('/api/servers', values);
+      const selectedCollection = String(values.collection);
+      // TODO: 선택한 collection의 카드 정보를 가져온다. 그리고 owner를 채크한다.
+
+      const selectedCollectionData = (dummyCards as Record<string, string[]>)[
+        selectedCollection
+      ];
+
+      const finalValues = {
+        ...values,
+        cards: selectedCollectionData.join(','),
+        owner: '0x61327612EC4aFD93e370eC0599f933bB08020A54',
+      };
+
+      await axios.post('/api/servers', finalValues);
       form.reset();
       router.refresh();
       window.location.reload();
@@ -134,26 +150,27 @@ export const InitialModal = () => {
               />
 
               {/* TODO: check */}
-              <FormField
-                control={form.control}
-                name='collection'
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className='uppercase text-xs font-bold text-zinc-500 dark:text-secondary/70'>
-                      Collection containing more than 54 NFTs
-                    </FormLabel>
-                    <Select
-                      disabled={isLoading}
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
-                      <FormControl>
-                        <SelectTrigger className='bg-zinc-300/50 border-0 focus:ring-0 text-black ring-offset-0 focus:ring-offset-0 capitalize outline-none'>
-                          <SelectValue placeholder='Select Your NFT Collection' />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        {/* {Object.values(Collections).map((collection) => (
+              {deckExisting ? (
+                <FormField
+                  control={form.control}
+                  name='collection'
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className='uppercase text-xs font-bold text-zinc-500 dark:text-secondary/70'>
+                        Collection containing more than 54 NFTs
+                      </FormLabel>
+                      <Select
+                        disabled={isLoading}
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
+                        <FormControl>
+                          <SelectTrigger className='bg-zinc-300/50 border-0 focus:ring-0 text-black ring-offset-0 focus:ring-offset-0 capitalize outline-none'>
+                            <SelectValue placeholder='Select Your NFT Collection' />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {/* {Object.values(Collections).map((collection) => (
                           <SelectItem
                             key={collection}
                             value={collection}
@@ -162,18 +179,61 @@ export const InitialModal = () => {
                             {collection.toLowerCase()}
                           </SelectItem>
                         ))} */}
-                        {/* <SelectItem value='버마' className='capitalize'>
-                          버마
+                          <SelectItem value='burmy' className='capitalize'>
+                            burmy
+                          </SelectItem>
+                          <SelectItem value='suri' className='capitalize'>
+                            suri
+                          </SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              ) : (
+                <FormField
+                  control={form.control}
+                  name='collection'
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className='uppercase text-xs font-bold text-zinc-500 dark:text-secondary/70'>
+                      Choose the deck you want to rent
+                      (Winning commission is 20%)
+                      </FormLabel>
+                      <Select
+                        disabled={isLoading}
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
+                        <FormControl>
+                          <SelectTrigger className='bg-zinc-300/50 border-0 focus:ring-0 text-black ring-offset-0 focus:ring-offset-0 capitalize outline-none'>
+                            <SelectValue placeholder='Select Your NFT Collection' />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {/* {Object.values(Collections).map((collection) => (
+                        <SelectItem
+                          key={collection}
+                          value={collection}
+                          className='capitalize'
+                        >
+                          {collection.toLowerCase()}
                         </SelectItem>
-                        <SelectItem value='수리' className='capitalize'>
-                          수리
-                        </SelectItem> */}
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+                      ))} */}
+                          <SelectItem value='burmy' className='capitalize'>
+                            burmylent
+                          </SelectItem>
+                          <SelectItem value='suri' className='capitalize'>
+                            surilent
+                          </SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              )}
             </div>
             <DialogFooter className='bg-gray-100 px-6 py-4'>
               <Button disabled={isLoading} variant='primary'>

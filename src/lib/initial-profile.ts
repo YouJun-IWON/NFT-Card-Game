@@ -1,8 +1,9 @@
 import { currentUser, redirectToSignIn } from '@clerk/nextjs';
 
 import { db } from '@/lib/db';
+import shortenAddress from './shortenAddress';
 
-//! 로그인 
+//! 로그인
 
 export const initialProfile = async () => {
   const user = await currentUser();
@@ -24,9 +25,9 @@ export const initialProfile = async () => {
   const newProfile = await db.profile.create({
     data: {
       userId: user.id,
-      name: `${user.firstName} ${user.lastName}`,
+      name: `${shortenAddress(user.web3Wallets[0].web3Wallet)}`,
       imageUrl: user.imageUrl,
-      email: 'example@example.com',
+      email: '',
       address: user.web3Wallets[0].web3Wallet,
     },
   });

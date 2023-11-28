@@ -66,7 +66,8 @@ export async function PATCH(
   try {
     const profile = await currentProfile();
     const { searchParams } = new URL(req.url);
-    const { role } = await req.json();
+    // 바뀔 순서 번호
+    const { newRole } = await req.json();
 
     const serverId = searchParams.get('serverId');
 
@@ -78,8 +79,9 @@ export async function PATCH(
       return new NextResponse('Server ID missing', { status: 400 });
     }
 
+    // 지금 나의 순서 번호
     if (!params.memberId) {
-      return new NextResponse('Member ID missing', { status: 400 });
+      return new NextResponse('Card ID missing', { status: 400 });
     }
 
     const server = await db.server.update({
@@ -88,19 +90,7 @@ export async function PATCH(
         profileId: profile.id,
       },
       data: {
-        members: {
-          update: {
-            where: {
-              id: params.memberId,
-              profileId: {
-                not: profile.id,
-              },
-            },
-            data: {
-              role,
-            },
-          },
-        },
+        cards: newRole,
       },
       include: {
         members: {

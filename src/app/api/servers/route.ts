@@ -7,7 +7,7 @@ import { db } from '@/lib/db';
 
 export async function POST(req: Request) {
   try {
-    const { name, imageUrl, collection } = await req.json();
+    const { name, imageUrl, collection, cards, owner } = await req.json();
 
     const profile = await currentProfile();
 
@@ -21,15 +21,24 @@ export async function POST(req: Request) {
         name,
         imageUrl,
         collection,
+        owner,
+        cards,
         inviteCode: uuidv4(),
         channels: {
-          create: [{ name: 'general', profileId: profile.id }],
+          create: [
+            { name: 'Announcement', profileId: profile.id },
+            { name: 'One Card', profileId: profile.id },
+            { name: 'Seven Poker', profileId: profile.id },
+            { name: 'Blackjack', profileId: profile.id },
+          ],
         },
         members: {
           create: [{ profileId: profile.id, role: MemberRole.ADMIN }],
         },
       },
     });
+
+    
 
     return NextResponse.json(server);
   } catch (err) {
