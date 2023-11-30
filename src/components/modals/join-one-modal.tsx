@@ -70,7 +70,7 @@ export const JoinOneModal = () => {
     if (server) {
       form.setValue('deck2', server.id);
       form.setValue('deck2Name', server.name);
-      form.setValue('deck2Image', server.imageUrl);
+      // form.setValue('deck2Image', server.imageUrl);
     }
   }, [server, form]);
 

@@ -48,14 +48,14 @@ export const EditServerModal = () => {
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: '',
-      imageUrl: '',
+      imageUrl: '/title/OneCard.svg',
     },
   });
 
   useEffect(() => {
     if (server) {
       form.setValue('name', server.name);
-      form.setValue('imageUrl', server.imageUrl);
+      // form.setValue('imageUrl', server?.imageUrl);
     }
   }, [server, form]);
 

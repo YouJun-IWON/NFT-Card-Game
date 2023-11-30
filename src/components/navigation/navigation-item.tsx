@@ -8,7 +8,7 @@ import { ActionTooltip } from '@/components/action-tooltip';
 
 interface NavigationItemProps {
   id: string;
-  imageUrl: string;
+  imageUrl?: string;
   name: string;
 }
 
@@ -37,7 +37,8 @@ export const NavigationItem = ({ id, imageUrl, name }: NavigationItemProps) => {
               'bg-primary/10 text-primary rounded-[16px]'
           )}
         >
-          <Image fill src={imageUrl} alt='Channel' />
+          <Image fill src='/title/OneCard.svg' alt='Channel' />
+          {/* <Image fill src={imageUrl} alt='Channel' /> */}
         </div>
       </button>
     </ActionTooltip>
