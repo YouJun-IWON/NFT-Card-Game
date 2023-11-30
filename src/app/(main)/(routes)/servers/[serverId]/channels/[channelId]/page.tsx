@@ -40,19 +40,11 @@ const ChannelIdPage = async ({ params }: ChannelIdPageProps) => {
     redirect('/');
   }
 
-  
-
   return (
     <div className='bg-white dark:bg-[#313338] flex flex-col h-full'>
-      <ChatHeader
-        name={channel.name}
-        serverId={channel.serverId}
-        type='channel'
-      />
+      <ChatHeader name={channel.name} type='channel' />
 
       <RoomList name={channel.name} serverId={params.serverId} />
-
-      
 
       {/* {channel.type === ChannelType.AUDIO && (
         <MediaRoom chatId={channel.id} video={false} audio={true} />

@@ -19,7 +19,6 @@ model Profile {
   servers  Server[]
   members  Member[]
   channels Channel[]
-  
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -33,6 +32,9 @@ model Server {
   collection String @db.Text
   cards      String @db.LongText
   owner      String @db.Text
+
+  winCount  Int @default(0)
+  loseCount Int @default(0)
 
   profileId String
   profile   Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
@@ -114,25 +116,25 @@ model Channel {
 }
 
 model OneCardRoom {
-  id      String @id @default(uuid())
-  name    String
+  id     String @id @default(uuid())
+  name   String
+  winner String @db.Text
 
-  player1 String 
+  player1        String
   player1Address String @db.Text
-  player1Image String @db.Text
+  player1Image   String @db.Text
 
-  deck1 String
-  deck1Name String
+  deck1      String
+  deck1Name  String
   deck1Image String @db.Text
 
-  player2 String @db.Text
+  player2        String @db.Text
   player2Address String @db.Text
-  player2Image String @db.Text
+  player2Image   String @db.Text
 
-  deck2 String
-  deck2Name String
+  deck2      String
+  deck2Name  String
   deck2Image String @db.Text
-  
 
   url String @db.Text
 
@@ -144,6 +146,7 @@ model OneCardRoom {
   status GameStatus @default(READY)
 
   createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@index([player1])
   @@index([deck1])
@@ -183,6 +186,14 @@ model Message {
 model Conversation {
   id String @id @default(uuid())
 
+  player1Turn Boolean
+  player2Turn Boolean
+
+  player1Deck String @db.LongText
+  player2Deck String @db.LongText
+  centerDeck  String @db.LongText
+  showDeck    String @db.LongText
+
   memberOneId String
   memberOne   Member @relation("MemberOne", fields: [memberOneId], references: [id], onDelete: Cascade)
 
@@ -190,6 +201,9 @@ model Conversation {
   memberTwo   Member @relation("MemberTwo", fields: [memberTwoId], references: [id], onDelete: Cascade)
 
   directMessages DirectMessage[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@unique([memberOneId, memberTwoId])
   @@index([memberTwoId])
@@ -199,6 +213,11 @@ model DirectMessage {
   id      String  @id @default(uuid())
   content String  @db.Text
   fileUrl String? @db.Text
+
+  player1Deck String @db.LongText
+  player2Deck String @db.LongText
+  centerDeck  String @db.LongText
+  showDeck    String @db.LongText
 
   memberId String
   member   Member @relation(fields: [memberId], references: [id], onDelete: Cascade)

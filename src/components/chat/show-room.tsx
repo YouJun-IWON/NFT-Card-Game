@@ -13,7 +13,7 @@ import { UserAvatar } from '../user-avatar';
 import { Button } from '../ui/button';
 import { SetOneCardRoom, SetServer } from '@/types';
 
-// TODO: 서버 데이터를 받아오고 싶은데... server 데이터를 어떻게 얻지?
+
 
 const ShowRoom = ({
   room,

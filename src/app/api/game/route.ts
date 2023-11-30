@@ -43,6 +43,7 @@ export async function POST(req: Request) {
         url,
         check1: true,
         check2: false,
+        winner: '',
       },
     });
 

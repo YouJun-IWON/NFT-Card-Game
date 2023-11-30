@@ -6,7 +6,7 @@ import { getOrCreateConversation } from '@/lib/conversation';
 import { currentProfile } from '@/lib/current-profile';
 import { ChatHeader } from '@/components/chat/chat-header';
 import { ChatMessages } from '@/components/chat/chat-messages';
-import { ChatInput } from '@/components/chat/chat-input';
+
 // import { MediaRoom } from '@/components/media-room';
 
 interface MemberIdPageProps {
@@ -18,7 +18,7 @@ interface MemberIdPageProps {
     video?: boolean;
   };
 }
-// TODO: 여기서 부터 차근차근 뜯어보자
+
 const MemberIdPage = async ({ params, searchParams }: MemberIdPageProps) => {
   const profile = await currentProfile();
 
@@ -36,14 +36,45 @@ const MemberIdPage = async ({ params, searchParams }: MemberIdPageProps) => {
     },
   });
 
+  const guestMember = await db.member.findFirst({
+    where: {
+      serverId: params.serverId,
+      role: 'GUEST',
+    },
+    // include: {
+    //   profile: true,
+    // },
+  });
+
+  const adminMember = await db.member.findFirst({
+    where: {
+      serverId: params.serverId,
+      role: 'ADMIN',
+    },
+    // include: {
+    //   profile: true,
+    // },
+  });
+
+  // console.log('guest member', currentMember)
+  // console.log('adminMember', adminMember)
+
   if (!currentMember) {
     return redirect('/');
   }
+  if (!adminMember || !currentMember || !guestMember) {
+    return redirect('/');
+  }
 
-  const conversation = await getOrCreateConversation({
-    memberOneId: currentMember.id,
-    memberTwoId: params.memberId,
-  });
+  //! 도전자가 member 1이 된다.
+
+  const memberOneId = guestMember.id;
+  const memberTwoId = adminMember.id;
+
+  const conversation = await getOrCreateConversation(
+    memberOneId!,
+    memberTwoId!
+  );
 
   if (!conversation) {
     return redirect(`/servers/${params.serverId}`);
@@ -54,41 +85,29 @@ const MemberIdPage = async ({ params, searchParams }: MemberIdPageProps) => {
   const otherMember =
     memberOne.profileId === profile.id ? memberTwo : memberOne;
 
+  // const otherDeck =
+  //   memberOne.profileId === profile.id ? player2Deck : player1Deck;
+
   return (
-    <div className='bg-white dark:bg-[#313338] flex flex-col h-full'>
+    <div className='bg-white dark:bg-[#313338] flex flex-col h-screen'>
       <ChatHeader
         imageUrl={otherMember.profile.imageUrl}
         name={otherMember.profile.name}
-        serverId={params.serverId}
         type='conversation'
       />
-      {/* {searchParams.video && (
-        <MediaRoom chatId={conversation.id} video={true} audio={true} />
-      )} */}
 
-      <>
-        <ChatMessages
-          member={currentMember}
-          name={otherMember.profile.name}
-          chatId={conversation.id}
-          type='conversation'
-          apiUrl='/api/direct-messages'
-          paramKey='conversationId'
-          paramValue={conversation.id}
-          socketUrl='/api/socket/direct-messages'
-          socketQuery={{
-            conversationId: conversation.id,
-          }}
-        />
-        <ChatInput
-          name={otherMember.profile.name}
-          type='conversation'
-          apiUrl='/api/socket/direct-messages'
-          query={{
-            conversationId: conversation.id,
-          }}
-        />
-      </>
+      <ChatMessages
+       serverId={params.serverId}
+        member={currentMember}
+        chatId={conversation.id}
+        apiUrl='/api/direct-messages'
+        paramKey='conversationId'
+        paramValue={conversation.id}
+        socketUrl='/api/socket/direct-messages'
+        socketQuery={{
+          conversationId: conversation.id,
+        }}
+      />
     </div>
   );
 };

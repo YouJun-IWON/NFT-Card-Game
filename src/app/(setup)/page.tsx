@@ -15,11 +15,39 @@ const SetupPage = async () => {
     where: {
       members: {
         some: {
-          profileId: profile.id,
+          AND: [
+            { profileId: profile.id },
+            { role: 'GUEST' },
+          ],
         },
       },
     },
   });
+
+  console.log('serverserver: ', server)
+
+  if(!server) {
+
+    const server = await db.server.findFirst({
+      where: {
+        members: {
+          some: {
+            profileId: profile.id,
+          },
+        },
+      },
+    });
+
+
+    if (server) {
+      return redirect(`/servers/${server.id}`);
+    }
+  
+    return <InitialModal deckExisting={deckExisting}/>;
+
+  }
+
+ 
 
   if (server) {
     return redirect(`/servers/${server.id}`);

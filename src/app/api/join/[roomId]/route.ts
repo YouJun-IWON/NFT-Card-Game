@@ -12,7 +12,7 @@ export async function PATCH(
 ) {
   try {
     const profile = await currentProfile();
-    const { deck2, player1 } = await req.json();
+    const { deck2, memberTwoId } = await req.json();
 
     if (!profile) {
       return new NextResponse('Unauthorized', { status: 401 });
@@ -42,13 +42,6 @@ export async function PATCH(
         player2Image: profile.imageUrl,
         check2: true,
         status: GameStatus.RUN,
-      },
-    });
-
-    const conversation = await db.conversation.create({
-      data: {
-        memberOneId: player1,
-        memberTwoId: profile.id,
       },
     });
 

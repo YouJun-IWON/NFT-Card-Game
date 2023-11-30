@@ -39,6 +39,7 @@ import { currentProfile } from '@/lib/current-profile';
 // TODO: 자신이 갖고 있는 덱을 조회한다. 기존의 덱이 있으면
 // TODO: 선택된 것에 대한 정보 밑에 보여주기 이기면 어떤 조건을 갖고 있는지도 확인
 // TODO: join 버튼 을 누르면 결제 klay를 넣고 확인이 되면 db에 데이터를 넣고 게임
+// TODO: 여기서 memberoneId를 guest로 맞추자 
 
 const formSchema = z.object({
   deck2: z.string().min(1, {
@@ -76,7 +77,7 @@ export const JoinOneModal = () => {
   const isLoading = form.formState.isSubmitting;
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    const newValuse = { ...values, player1: room?.player1 };
+    const newValuse = { ...values, memberTwoId: room?.player1 };
 
     try {
       await axios.patch(`/api/join/${room?.id}`, newValuse);
