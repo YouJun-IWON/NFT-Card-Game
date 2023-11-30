@@ -19,7 +19,7 @@ export const NavigationSidebar = async () => {
 
   const servers = await db.server.findMany({
     where: {
-          profileId: profile.id,
+      profileId: profile.id,
     },
   });
 
@@ -33,7 +33,7 @@ export const NavigationSidebar = async () => {
             <NavigationItem
               id={server.id}
               name={server.name}
-              // imageUrl={server.imageUrl}
+              imageUrl={server.imageUrl}
             />
           </div>
         ))}
