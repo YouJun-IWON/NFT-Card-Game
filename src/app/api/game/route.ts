@@ -7,7 +7,7 @@ import { db } from '@/lib/db';
 export async function POST(req: Request) {
   try {
     const profile = await currentProfile();
-    const { name, type, url, deck1, deck1Name, deck1Image } = await req.json();
+    const { name, type, url, deck1, deck1Name, deck1Image, contract } = await req.json();
     const { searchParams } = new URL(req.url);
 
     const serverId = searchParams.get('serverId');
@@ -30,6 +30,7 @@ export async function POST(req: Request) {
         deck1,
         deck1Name,
         deck1Image,
+        contract,
         deck2: '',
         deck2Name: '',
         deck2Image: '',
@@ -41,7 +42,7 @@ export async function POST(req: Request) {
         player2Image: '',
         type,
         url,
-        check1: true,
+        check1: false,
         check2: false,
         winner: '',
       },

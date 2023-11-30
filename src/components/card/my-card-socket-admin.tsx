@@ -32,6 +32,7 @@ interface CardInputProps {
   cards: any;
   showDeck: any;
   serverId: string;
+  deck: any;
 }
 
 const formSchema = z.object({
@@ -46,6 +47,7 @@ const MyCardsSocketAdmin = ({
   query,
   type,
   member,
+  deck
 }: CardInputProps) => {
   const router = useRouter();
 
@@ -88,6 +90,9 @@ const MyCardsSocketAdmin = ({
     }
   };
 
+  console.log('cards', deck);
+  console.log();
+
   return (
     <div className='relative flex justify-center w-full'>
       <Form {...form}>
@@ -109,8 +114,7 @@ const MyCardsSocketAdmin = ({
                         <div key={index}>
                           <RadioGroupItem
                             disabled={
-                              type === 'ADMIN' ||
-                              !possibleCards.includes(card)
+                              type === 'ADMIN' || !possibleCards.includes(card)
                             }
                             value={card}
                             id={card}
@@ -133,10 +137,10 @@ const MyCardsSocketAdmin = ({
                               )}
                             />
                             <Image
-                              src={`/testImage/test.png`}
+                              src={cards.name}
                               width={80}
                               height={80}
-                              alt='opponent cards'
+                              alt='my card'
                               className={cn(
                                 !possibleCards.includes(card)
                                   ? 'brightness-50'
@@ -195,6 +199,17 @@ const MyCardsSocketAdmin = ({
                         </FormItem>
                       )}
                     />
+
+                    <Badge
+                      variant='secondary'
+                      className={cn(
+                        type === 'ADMIN'
+                          ? 'absolute left-1/2 transform -translate-x-1/2 min-w-[100px] flex justify-center -top-28 animate-pulse text-lg mt-4'
+                          : 'hidden'
+                      )}
+                    >
+                      wait...
+                    </Badge>
 
                     <Badge className='absolute right-0 min-w-[150px] flex justify-center -top-16 text-md mt-4 mr-4'>
                       Cards Count: {cards.length}

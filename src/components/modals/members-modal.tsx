@@ -49,6 +49,7 @@ import { cn } from '@/lib/utils';
 import { pockerCards } from '@/constants/pockerCard';
 
 import swapCards from '@/lib/cardSwap';
+import Image from 'next/image';
 
 // TODO: 사용자가 소유하고 있는, 그리고 이 화면에서 선택된 Collection의 모든 NFT를 가져온다.
 // TODO: 기존에 미리 설정되어 있는 NFT를 제외하고 나머지 NFT를 보여준다.
@@ -93,6 +94,8 @@ export const MembersModal = () => {
     }
   };
 
+  console.log(objectCard);
+
   return (
     <Dialog open={isModalOpen} onOpenChange={onClose}>
       <DialogContent className='bg-white text-black overflow-hidden'>
@@ -111,7 +114,7 @@ export const MembersModal = () => {
           {objectCard?.map((card, index) => (
             <div key={index} className='flex items-center gap-x-2 mb-6'>
               {/* <UserAvatar src={member.profile.imageUrl} /> */}
-              <div>Card Image</div>
+              <Image src={card.name} width={50} height={50} alt='NFT Image' className='rounded-md'/>
               <div className='flex flex-col gap-y-1'>
                 <div className='text-xs font-semibold flex items-center gap-x-1'>
                   NFT name

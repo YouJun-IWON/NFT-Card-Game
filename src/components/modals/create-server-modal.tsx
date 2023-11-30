@@ -64,6 +64,13 @@ export const CreateServerModal = ({ collection }: any) => {
   const isLoading = form.formState.isSubmitting;
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    // const selectedCollection = String(values.collection);
+    // // TODO: 선택한 collection의 카드 정보를 가져온다. 그리고 owner를 채크한다.
+
+    // const selectedCollectionData = (dummyCards as Record<string, string[]>)[
+    //   selectedCollection
+    // ];
+
     try {
       const selectedCollection = String(values.collection);
       // TODO: 선택한 collection의 카드 정보를 가져온다. 그리고 owner를 채크한다.
@@ -75,7 +82,7 @@ export const CreateServerModal = ({ collection }: any) => {
       const finalValues = {
         ...values,
         cards: selectedCollectionData.join(','),
-        owner: '0x61327612EC4aFD93e370eC0599f933bB08020A54',
+        owner: '0x12327612EC4aFD93e370eC0599f933bB08020A54',
       };
 
       await axios.post('/api/servers', finalValues);
@@ -173,8 +180,8 @@ export const CreateServerModal = ({ collection }: any) => {
                           {collection.toLowerCase()}
                         </SelectItem>
                       ))} */}
-                          <SelectItem value='burmy' className='capitalize'>
-                            burmy
+                          <SelectItem value='bummy' className='capitalize'>
+                            bummy
                           </SelectItem>
                           <SelectItem value='suri' className='capitalize'>
                             suri
@@ -215,11 +222,11 @@ export const CreateServerModal = ({ collection }: any) => {
                         {collection.toLowerCase()}
                       </SelectItem>
                     ))} */}
-                          <SelectItem value='burmy' className='capitalize'>
-                            burmylent
+                          <SelectItem value='bummy' className='capitalize'>
+                            Bummy NFT Rental
                           </SelectItem>
                           <SelectItem value='suri' className='capitalize'>
-                            surilent
+                            Suri NFT Rental
                           </SelectItem>
                         </SelectContent>
                       </Select>

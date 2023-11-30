@@ -32,6 +32,7 @@ model Server {
   collection String @db.Text
   cards      String @db.LongText
   owner      String @db.Text
+  address    String @db.Text
 
   winCount  Int @default(0)
   loseCount Int @default(0)
@@ -123,6 +124,7 @@ model OneCardRoom {
   player1        String
   player1Address String @db.Text
   player1Image   String @db.Text
+  contract       String @db.Text
 
   deck1      String
   deck1Name  String
@@ -140,7 +142,7 @@ model OneCardRoom {
 
   type GameType @default(ONE)
 
-  check1 Boolean
+  check1 Boolean 
   check2 Boolean
 
   status GameStatus @default(READY)

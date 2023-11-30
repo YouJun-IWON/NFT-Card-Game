@@ -8,17 +8,12 @@ import { Loader2, ServerCrash } from 'lucide-react';
 import { useChatQuery } from '@/hooks/use-chat-query';
 import { useChatSocket } from '@/hooks/use-chat-socket';
 
-import { ChatWelcome } from './chat-welcome';
-import { ChatItem } from './chat-item';
-import { ChatInput } from './chat-input';
-import { ChatInputAdmin } from './chat-input-admin';
-
 import OpponentCards from '../card/opponent-card';
 import CenterCards from '../card/center-card';
 
 import MyCardsSocket from '../card/my-card-socket';
 import MyCardsSocketAdmin from '../card/my-card-socket-admin';
-import { FirstTurn } from './first-turn';
+
 import StartGame from './start-game';
 import EndOneCard from '../card/end-one-card';
 
@@ -26,7 +21,7 @@ const DATE_FORMAT = 'd MMM yyyy, HH:mm';
 
 // TODO: 여기서 보여주던가 하자 => conversation에 초기 값들이 들어 가 있고, 각각 번갈아가면서 카드를 넣을 때,
 
-// TODO: 밑의 타입 적용시키기 
+// TODO: 밑의 타입 적용시키기
 type MessageWithMemberWithProfile = Message & {
   member: Member & {
     profile: Profile;
@@ -42,7 +37,7 @@ interface ChatMessagesProps {
   socketQuery: Record<string, string>;
   paramKey: 'channelId' | 'conversationId';
   paramValue: string;
-
+  deck: any;
 }
 
 export const ChatMessages = ({
@@ -54,7 +49,7 @@ export const ChatMessages = ({
   socketQuery,
   paramKey,
   paramValue,
-
+  deck,
 }: ChatMessagesProps) => {
   const queryKey = `chat:${chatId}`;
   const addKey = `chat:${chatId}:messages`;
@@ -92,10 +87,6 @@ export const ChatMessages = ({
   console.log('me', data);
   console.log('set', data?.pages[0]?.items[0]);
 
-  const turn = data?.pages[0]?.items[0]?.member.profile.address;
-
-  console.log('deck', data?.pages[0]?.items[0].player1Deck.split(','));
-
   const turnCheck = data?.pages[0]?.items[0]?.member.role;
 
   console.log('turn', turnCheck);
@@ -123,11 +114,15 @@ export const ChatMessages = ({
   //         centerDeck: 'end',
   //         showDeck: 'end',
 
+  console.log('wefwefwef', deck);
+
   return (
     <>
-      {
-      socketCenterDeck[0] === 'end' ? (
-        <EndOneCard player1={socketPlayer1Deck[0]} player2={socketPlayer2Deck[0]}/>
+      {socketCenterDeck.join() === 'end' ? (
+        <EndOneCard
+          player1={socketPlayer1Deck[0].join()}
+          player2={socketPlayer2Deck[0].join()}
+        />
       ) : (
         <div className='flex flex-col items-center justify-between h-full'>
           {member.role === 'ADMIN' ? (
@@ -143,7 +138,8 @@ export const ChatMessages = ({
 
           {member.role === 'ADMIN' ? (
             <MyCardsSocketAdmin
-            serverId={serverId}
+              deck={deck}
+              serverId={serverId}
               member={member}
               showDeck={socketShowDeck}
               type={turnCheck}
@@ -153,7 +149,8 @@ export const ChatMessages = ({
             />
           ) : (
             <MyCardsSocket
-            serverId={serverId}
+              deck={deck}
+              serverId={serverId}
               member={member}
               showDeck={socketShowDeck}
               type={turnCheck}

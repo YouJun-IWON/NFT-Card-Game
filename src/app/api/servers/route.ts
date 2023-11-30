@@ -21,6 +21,7 @@ export async function POST(req: Request) {
         name,
         imageUrl,
         collection,
+        address: profile.address,
         owner,
         cards,
         inviteCode: uuidv4(),

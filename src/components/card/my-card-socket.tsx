@@ -21,6 +21,8 @@ import { judgeTrue } from '@/lib/gameMachine';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '../ui/label';
 import { cn } from '@/lib/utils';
+import { suri } from '@/constants/suri';
+import { bummy } from '@/constants/bummy';
 
 // TODO: 사진 붙히기
 
@@ -32,6 +34,7 @@ interface CardInputProps {
   cards: any;
   showDeck: any;
   serverId: string;
+  deck: any;
 }
 
 const formSchema = z.object({
@@ -45,6 +48,7 @@ const MyCardsSocket = ({
   query,
   serverId,
   type,
+  deck,
   member,
 }: CardInputProps) => {
   const router = useRouter();
@@ -88,7 +92,9 @@ const MyCardsSocket = ({
     }
   };
 
-  console.log('cardscardscards', cards);
+  console.log('cardscardscards', deck);
+
+  const randomNum = Math.floor(Math.random() * 28);
 
   return (
     <div className='relative flex justify-center w-full'>
@@ -111,8 +117,7 @@ const MyCardsSocket = ({
                         <div key={index}>
                           <RadioGroupItem
                             disabled={
-                              type === 'GUEST' ||
-                              !possibleCards.includes(card)
+                              type === 'GUEST' || !possibleCards.includes(card)
                             }
                             value={card}
                             id={card}
@@ -135,15 +140,19 @@ const MyCardsSocket = ({
                               )}
                             />
                             <Image
-                              src={`/testImage/test.png`}
+                              src={
+                                deck === 'suri'
+                                  ? suri[index + randomNum]
+                                  : bummy[index + randomNum]
+                              }
                               width={80}
                               height={80}
-                              alt='opponent cards'
+                              alt='my card'
                               className={cn(
                                 !possibleCards.includes(card)
                                   ? 'brightness-50'
                                   : 'brightness-100',
-                                'absolute inset-0 left-6 top-11 rounded-md'
+                                'absolute inset-0 left-6 top-14 rounded-md'
                               )}
                             />
                           </Label>
@@ -152,7 +161,11 @@ const MyCardsSocket = ({
                     </RadioGroup>
 
                     <FormField
-                      disabled={type === 'GUEST' || possibleCards.length === 0 || isLoading}
+                      disabled={
+                        type === 'GUEST' ||
+                        possibleCards.length === 0 ||
+                        isLoading
+                      }
                       control={form.control}
                       name='content'
                       render={({ field }) => (
@@ -193,6 +206,16 @@ const MyCardsSocket = ({
                         </FormItem>
                       )}
                     />
+                    <Badge
+                      variant='secondary'
+                      className={cn(
+                        type === 'GUEST'
+                          ? 'absolute left-1/2 transform -translate-x-1/2 min-w-[100px] flex justify-center -top-28 animate-pulse text-lg mt-4'
+                          : 'hidden'
+                      )}
+                    >
+                      wait...
+                    </Badge>
 
                     <Badge className='absolute right-0 min-w-[150px] flex justify-center -top-16 text-md mt-4 mr-4'>
                       Cards Count: {cards.length}

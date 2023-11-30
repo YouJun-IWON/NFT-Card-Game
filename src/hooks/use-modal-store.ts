@@ -14,7 +14,8 @@ export type ModalType =
   | 'messageFile'
   | 'deleteMessage'
   | 'joinGame'
-  | 'endgame';
+  | 'endgame'
+  | 'checkReciept';
 
 interface ModalData {
   profile?: Profile;
@@ -26,6 +27,7 @@ interface ModalData {
   channelType?: ChannelType;
   apiUrl?: string;
   query?: Record<string, any>;
+  result?: OneCardRoom;
 }
 
 interface ModalStore {

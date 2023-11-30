@@ -35,11 +35,13 @@ import { useRouter } from 'next/navigation';
 import { useModal } from '@/hooks/use-modal-store';
 import { UserAvatar } from '../user-avatar';
 import { currentProfile } from '@/lib/current-profile';
+import { ethers } from 'ethers';
+import { abi } from '@/constants/abi';
 
 // TODO: 자신이 갖고 있는 덱을 조회한다. 기존의 덱이 있으면
 // TODO: 선택된 것에 대한 정보 밑에 보여주기 이기면 어떤 조건을 갖고 있는지도 확인
 // TODO: join 버튼 을 누르면 결제 klay를 넣고 확인이 되면 db에 데이터를 넣고 게임
-// TODO: 여기서 memberoneId를 guest로 맞추자 
+// TODO: 여기서 memberoneId를 guest로 맞추자
 
 const formSchema = z.object({
   deck2: z.string().min(1, {
@@ -77,6 +79,26 @@ export const JoinOneModal = () => {
   const isLoading = form.formState.isSubmitting;
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+
+    await provider.send('eth_requestAccounts', []);
+
+    const signer = provider.getSigner();
+
+    const contractWithSigner = new ethers.Contract(
+      '0x3523eCA3438cE8aCF4A6A10e3A0a74dD95CBC8c4',
+      abi,
+      signer
+    );
+
+    await contractWithSigner.join_game(room?.contract, {
+      value: ethers.utils.parseEther('1'),
+    });
+
+    // const txReceipt = await gameRoom.wait();
+
+    // console.log('Game room created:', txReceipt.logs[0].address);
+
     const newValuse = { ...values, memberTwoId: room?.player1 };
 
     try {

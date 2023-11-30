@@ -7,6 +7,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { GameType } from '@prisma/client';
 
+
 import {
   Dialog,
   DialogContent,
@@ -33,8 +34,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useOrigin } from '@/hooks/use-origin';
+
+import { ethers } from 'ethers';
+import { abi } from '@/constants/abi';
+import { currentProfile } from '@/lib/current-profile';
 
 const formSchema = z.object({
   name: z
@@ -48,7 +53,7 @@ const formSchema = z.object({
   type: z.nativeEnum(GameType),
 });
 
-// TODO: 하나만 생성할 수 있게 해야한다. 내 ID가 있는 room의 status가 READY 나 RUN이면 만들지 못하게 한다. 
+// TODO: 하나만 생성할 수 있게 해야한다. 내 ID가 있는 room의 status가 READY 나 RUN이면 만들지 못하게 한다.
 export const CreateChannelModal = () => {
   const { isOpen, onClose, type, data } = useModal();
   const router = useRouter();
@@ -70,6 +75,8 @@ export const CreateChannelModal = () => {
     },
   });
 
+
+
   // useEffect(() => {
   //   if (channelType) {
   //     form.setValue('type', channelType);
@@ -81,7 +88,31 @@ export const CreateChannelModal = () => {
   const isLoading = form.formState.isSubmitting;
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
+   
 
+
+
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+
+ 
+    await provider.send('eth_requestAccounts', []);
+
+    
+    const signer = provider.getSigner();
+
+    const contractWithSigner = new ethers.Contract(
+      '0x3523eCA3438cE8aCF4A6A10e3A0a74dD95CBC8c4',
+      abi,
+      signer
+    );
+
+    const gameRoom = await contractWithSigner.create_game({
+      value: ethers.utils.parseEther('1'),
+    });
+
+    const txReceipt = await gameRoom.wait();
+
+    console.log('Game room created:', txReceipt.logs[0].address);
 
     const newValues = {
       ...values,
@@ -89,6 +120,7 @@ export const CreateChannelModal = () => {
       deck1: server?.id,
       deck1Name: server?.name,
       deck1Image: server?.imageUrl,
+      contract: txReceipt.logs[0].address.toString(),
     };
     try {
       const url = qs.stringifyUrl({

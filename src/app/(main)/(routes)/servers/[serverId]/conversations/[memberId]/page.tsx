@@ -26,6 +26,8 @@ const MemberIdPage = async ({ params, searchParams }: MemberIdPageProps) => {
     return redirectToSignIn();
   }
 
+  
+
   const currentMember = await db.member.findFirst({
     where: {
       serverId: params.serverId,
@@ -33,8 +35,13 @@ const MemberIdPage = async ({ params, searchParams }: MemberIdPageProps) => {
     },
     include: {
       profile: true,
+      server: true,
     },
   });
+
+  console.log(currentMember?.server.collection)
+
+  const deck = currentMember?.server.collection
 
   const guestMember = await db.member.findFirst({
     where: {
@@ -97,6 +104,7 @@ const MemberIdPage = async ({ params, searchParams }: MemberIdPageProps) => {
       />
 
       <ChatMessages
+      deck={deck}
        serverId={params.serverId}
         member={currentMember}
         chatId={conversation.id}

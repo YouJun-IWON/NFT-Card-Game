@@ -108,7 +108,9 @@ export default async function handler(
 
     console.log('setDeck[0].length', setDeck[0].length);
 
+    // TODO: 나의 덱에 한장도 없을 떄 내가 이긴게 된다.
     if (setDeck[0].length === 0) {
+      //! GUEST 의 승리
       await db.oneCardRoom.updateMany({
         where: {
           status: GameStatus.RUN,
@@ -251,8 +253,8 @@ export default async function handler(
     // TODO: 이 부분 ADMIN 이 아닌 GUEST를 지워야 한다.
     // TODO: 그리고 Defi를 결과에 따라 처리한다. api 필요
     // TODO: 센터댁이 없을 때 남은 카드 숫자 비교
-    // TODO: 나의 덱에 한장도 없을 떄 내가 이긴게 된다. 추가하기
-    if (setDeck[2].length === 0 || setDeck[0].length > 21) {
+
+    if (setDeck[2].length === 0 || setDeck[0].length > 8) {
       if (
         setDeck[2].length === 0 &&
         setDeck[0].length <= 21 &&

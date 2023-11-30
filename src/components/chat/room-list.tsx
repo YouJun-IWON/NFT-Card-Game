@@ -12,7 +12,6 @@ import { GameWelcome } from './game-welcome';
 
 const DATE_FORMAT = 'd MMM yyyy, HH:mm';
 
-
 interface ChatMessagesProps {
   name: string;
   serverId: string;
@@ -70,11 +69,38 @@ export const RoomList = async ({ name, serverId }: ChatMessagesProps) => {
     );
   }
 
+  const results = await db.oneCardRoom.findMany({
+    where: {
+      status: 'END',
+      OR: [
+        {
+          player1: profile!.id,
+        },
+        {
+          player2: profile!.id,
+        },
+      ],
+      AND: {
+        OR: [
+          {
+            deck1: serverId,
+          },
+          {
+            deck2: serverId,
+          },
+        ],
+      },
+    },
+    orderBy: {
+      createdAt: 'asc',
+    },
+  });
+
   if (name === 'Announcement') {
     // Announcement list
     return (
       <div className='flex-1  flex flex-col py-4 overflow-y-auto'>
-        <GameWelcome name={name} />
+        <GameWelcome name={name} results={results} profile={profile}/>
       </div>
     );
   }

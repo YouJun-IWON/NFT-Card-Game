@@ -6,7 +6,8 @@ import { ourFileRouter } from './core';
 export const { GET, POST } = createNextRouteHandler({
   router: ourFileRouter,
   config: {
-    callbackUrl: "https://nft-card-game-production.up.railway.app/api/uploadthing"
+    callbackUrl:
+      'https://nft-card-game-production.up.railway.app/api/uploadthing',
   },
 });
 

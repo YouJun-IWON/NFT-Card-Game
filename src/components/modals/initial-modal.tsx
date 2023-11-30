@@ -67,6 +67,14 @@ export const InitialModal = ({ deckExisting }: any) => {
   const isLoading = form.formState.isSubmitting;
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
+
+    // const selectedCollection = String(values.collection);
+    // // TODO: 선택한 collection의 카드 정보를 가져온다. 그리고 owner를 채크한다.
+
+    // const selectedCollectionData = (dummyCards as Record<string, string[]>)[
+    //   selectedCollection
+    // ];
+    
     try {
       const selectedCollection = String(values.collection);
       // TODO: 선택한 collection의 카드 정보를 가져온다. 그리고 owner를 채크한다.
@@ -179,8 +187,8 @@ export const InitialModal = ({ deckExisting }: any) => {
                             {collection.toLowerCase()}
                           </SelectItem>
                         ))} */}
-                          <SelectItem value='burmy' className='capitalize'>
-                            burmy
+                          <SelectItem value='bummy' className='capitalize'>
+                            bummy
                           </SelectItem>
                           <SelectItem value='suri' className='capitalize'>
                             suri
@@ -198,8 +206,8 @@ export const InitialModal = ({ deckExisting }: any) => {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel className='uppercase text-xs font-bold text-zinc-500 dark:text-secondary/70'>
-                      Choose the deck you want to rent
-                      (Winning commission is 20%)
+                        Choose the deck you want to rent (Winning commission is
+                        20%)
                       </FormLabel>
                       <Select
                         disabled={isLoading}
@@ -221,11 +229,11 @@ export const InitialModal = ({ deckExisting }: any) => {
                           {collection.toLowerCase()}
                         </SelectItem>
                       ))} */}
-                          <SelectItem value='burmy' className='capitalize'>
-                            burmylent
+                          <SelectItem value='bummy' className='capitalize'>
+                          Bummy NFT Rental
                           </SelectItem>
                           <SelectItem value='suri' className='capitalize'>
-                            surilent
+                          Suri NFT Rental
                           </SelectItem>
                         </SelectContent>
                       </Select>
