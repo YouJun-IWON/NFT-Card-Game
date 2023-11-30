@@ -59,7 +59,7 @@ export const InitialModal = ({ deckExisting }: any) => {
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: '',
-      imageUrl: '',
+      imageUrl: '/title/OneCard.svg',
       collection: '',
     },
   });
@@ -110,7 +110,7 @@ export const InitialModal = ({ deckExisting }: any) => {
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-8'>
             <div className='space-y-8 px-6'>
-              <div className='flex items-center justify-center text-center'>
+              {/* <div className='flex items-center justify-center text-center'>
                 <FormField
                   control={form.control}
                   name='imageUrl'
@@ -126,7 +126,7 @@ export const InitialModal = ({ deckExisting }: any) => {
                     </FormItem>
                   )}
                 />
-              </div>
+              </div> */}
 
               <FormField
                 control={form.control}
