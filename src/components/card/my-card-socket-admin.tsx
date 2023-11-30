@@ -21,6 +21,8 @@ import { judgeTrue } from '@/lib/gameMachine';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '../ui/label';
 import { cn } from '@/lib/utils';
+import { suri } from '@/constants/suri';
+import { bummy } from '@/constants/bummy';
 
 // TODO: 사진 붙히기
 
@@ -93,6 +95,8 @@ const MyCardsSocketAdmin = ({
   console.log('cards', deck);
   console.log();
 
+
+
   return (
     <div className='relative flex justify-center w-full'>
       <Form {...form}>
@@ -137,7 +141,11 @@ const MyCardsSocketAdmin = ({
                               )}
                             />
                             <Image
-                              src={cards.name}
+                             src={
+                              deck === 'suri'
+                                ? suri[index + Math.floor(Math.random() * 28)]
+                                : bummy[index + Math.floor(Math.random() * 28)]
+                            }
                               width={80}
                               height={80}
                               alt='my card'

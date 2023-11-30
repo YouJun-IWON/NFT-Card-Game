@@ -94,7 +94,7 @@ const MyCardsSocket = ({
 
   console.log('cardscardscards', deck);
 
-  const randomNum = Math.floor(Math.random() * 28);
+  
 
   return (
     <div className='relative flex justify-center w-full'>
@@ -142,8 +142,8 @@ const MyCardsSocket = ({
                             <Image
                               src={
                                 deck === 'suri'
-                                  ? suri[index + randomNum]
-                                  : bummy[index + randomNum]
+                                  ? suri[index + Math.floor(Math.random() * 28)]
+                                  : bummy[index + Math.floor(Math.random() * 28)]
                               }
                               width={80}
                               height={80}
