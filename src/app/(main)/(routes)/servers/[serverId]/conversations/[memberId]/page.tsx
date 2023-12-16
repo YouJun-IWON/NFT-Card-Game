@@ -102,6 +102,7 @@ const MemberIdPage = async ({ params, searchParams }: MemberIdPageProps) => {
         name={otherMember.profile.name}
         type='conversation'
       />
+      
 
       <ChatMessages
       deck={deck}

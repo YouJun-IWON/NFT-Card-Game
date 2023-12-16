@@ -7,9 +7,9 @@ import { redirect } from 'next/navigation';
 //TODO:  이 부분에서 백엔드에 주소와 함께 요청을 보낸다. 그리고 데이터를 받아온다. 
 //TODO:  그 데이터를 Props로 넘겨 준다. 
 const SetupPage = async () => {
-  const profile = await initialProfile();
-
+  
   const deckExisting = '';
+  const profile = await initialProfile();
 
   const server = await db.server.findFirst({
     where: {
