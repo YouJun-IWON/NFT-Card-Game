@@ -15,6 +15,7 @@ import {
   Diamond,
   Club,
   SquareAsterisk,
+  User,
 } from 'lucide-react';
 
 import {
@@ -58,7 +59,7 @@ export const ServerHeader = ({
             className='text-indigo-600 dark:text-indigo-400 px-3 py-2 text-sm cursor-pointer'
           >
             Invite People
-            <Heart className='h-4 w-4 ml-auto' />
+            <User className='h-4 w-4 ml-auto' />
           </DropdownMenuItem>
         )}
         {isAdmin && (
@@ -77,6 +78,15 @@ export const ServerHeader = ({
           >
             Edit NFT Card
             <Diamond className='h-4 w-4 ml-auto' />
+          </DropdownMenuItem>
+        )}
+        {isAdmin && (
+          <DropdownMenuItem
+            onClick={() => onOpen('customizing', { server })}
+            className='px-3 py-2 text-sm cursor-pointer'
+          >
+            Customizing Deck
+            <Heart className='h-4 w-4 ml-auto fill' />
           </DropdownMenuItem>
         )}
         {isModerator && (

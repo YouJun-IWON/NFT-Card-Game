@@ -226,6 +226,21 @@ export const ServerSidebar = async ({ serverId }: ServerSidebarProps) => {
           </div>
         )}
       </ScrollArea>
+ {/* <div className='flex flex-col gap-3'>
+
+      <div className='text-white flex justify-between p-4'>
+        <Hash className='mr-2 h-4 w-4' />
+        <span>chat</span>
+      </div>
+      <div className='text-white flex justify-between p-4'>
+      <Mic className="mr-2 h-4 w-4" />
+        <span>chat</span>
+      </div>
+      <div className='text-white flex justify-between p-4'>
+      <Video className="mr-2 h-4 w-4" />
+        <span>chat</span>
+      </div>
+ </div> */}
     </div>
   );
 };

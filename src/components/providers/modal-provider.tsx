@@ -16,6 +16,7 @@ import { DeleteMessageModal } from '@/components/modals/delete-message-modal';
 import { JoinOneModal } from '@/components/modals/join-one-modal';
 import { EndgameModal } from '@/components/modals/end-game-model';
 import { CheckReceipt } from '@/components/modals/check-receipt-modal';
+import { CustomizingModal } from '../modals/customizing-modal';
 
 export const ModalProvider = () => {
   const [isMounted, setIsMounted] = useState(false);
@@ -44,6 +45,7 @@ export const ModalProvider = () => {
       <JoinOneModal />
       <EndgameModal />
       <CheckReceipt />
+      <CustomizingModal />
     </>
   );
 };

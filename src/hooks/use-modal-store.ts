@@ -15,7 +15,8 @@ export type ModalType =
   | 'deleteMessage'
   | 'joinGame'
   | 'endgame'
-  | 'checkReciept';
+  | 'checkReciept'
+  | 'customizing';
 
 interface ModalData {
   profile?: Profile;
